@@ -1,0 +1,64 @@
+﻿
+<ejs-button id="storestate" cssClass="e-flat" isPrimary="true" content="storestate"></ejs-button>
+<ejs-button id="restorestate" cssClass="e-flat" isPrimary="true" content="restorestate"></ejs-button>
+<div>
+    <ejs-grid id="Grid" height="500" enablePersistence="true" showColumnChooser="true" toolbar="@(new List<string>() { "ColumnChooser"})">
+        <e-data-manager url="/Home/UrlDatasource" adaptor="UrlAdaptor"></e-data-manager>
+        <e-grid-columns>
+            <e-grid-column field="OrderID" headerText="Order ID" isPrimaryKey="true" textAlign="Right" width="120"></e-grid-column>
+            <e-grid-column field="CustomerID" headerText="Customer Name" width="150"></e-grid-column>
+            <e-grid-column field="EmployeeID" headerText="Employee ID" width="170"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</div>
+
+
+<script>
+    document.getElementById("storestate").addEventListener('click', function () {
+        var grid = document.getElementById("Grid").ej2_instances[0];
+        // get the persisted data from the grid by using getPersistData method.
+
+        var persistData = JSON.stringify({ persistData: grid.getPersistData() }) // Grid persistData
+
+        var ajax = new ej.base.Ajax({ // used our ajax to send the stored persistData to server
+
+            url: "/Home/StorePersistData",
+
+            type: "POST",
+
+            contentType: "application/json; charset=utf-8",
+
+            datatype: "json",
+
+            data: persistData // send the data to server
+
+        });
+
+        ajax.send();
+    });
+    document.getElementById("restorestate").addEventListener('click', function () {
+        var ajax = new ej.base.Ajax({ // used our ajax to send the retrive the persistData from server
+
+            url: "/Home/Restore",
+
+            type: "POST",
+
+            contentType: "application/json; charset=utf-8"
+
+        });
+
+        ajax.send();
+
+        ajax.onSuccess = function (result) {
+
+            var grid = document.getElementById("Grid").ej2_instances[0];
+
+            var state = JSON.parse(result); // get the data
+
+            grid.setProperties(state); // restore the Grid state
+
+        }
+    });
+     
+
+</script>
