@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using netCore6x.Models;
 using System.Diagnostics;
 using Syncfusion.EJ2.Base;
@@ -19,7 +19,7 @@ namespace netCore6x.Controllers
             _logger = logger;
         }
         public int indexcount = 0;
-        public static string persistedData;
+        public static string? persistedData;
 
         public IActionResult Index()
         {
@@ -30,8 +30,6 @@ namespace netCore6x.Controllers
         {
             IEnumerable DataSource =  new List<OrdersDetails>();
             int count = OrdersDetails.GetAllRecords().Cast<object>().Count();
-            //if (dm.Where != null && dm.Where.Count > 0) //Filtering
-            //{
                 DataSource = OrdersDetails.GetAllRecords();
                 DataOperations operation = new DataOperations();
                 if (dm.Search != null && dm.Search.Count > 0)
@@ -55,10 +53,6 @@ namespace netCore6x.Controllers
                     DataSource = operation.PerformTake(DataSource, dm.Take);
                 }
                 return dm.RequiresCounts ? Json(new { result = DataSource, count = count }) : Json(DataSource);
-            //} else
-            //{
-            //    return Json(new { result = DataSource, count = DataSource.Cast<object>().Count() });
-            //}
         }
 
 
